@@ -1,0 +1,20 @@
+// Step 1
+			b = pTmpXB[i * size_img.width + j];
+			g = pTmpXG[i * size_img.width + j];
+			r = pTmpXR[i * size_img.width + j];
+
+			// Step 2
+
+			b = constBVal1 * b + constBVal2;
+			g = constGVal1 * g + constGVal2;
+			r = constRVal1 * r + constRVal2;
+			
+			// Step 3
+			mOutImg.at<Vec3b>(i, j)[0] = b;
+			mOutImg.at<Vec3b>(i, j)[1] = g;
+			mOutImg.at<Vec3b>(i, j)[2] = r;
+
+			//Or
+			/*mOutImg.at<Vec3b>(i, j)[0] = constBVal1 * pTmpXB[i * size_img.width + j] + constBVal2;
+			mOutImg.at<Vec3b>(i, j)[1] = constGVal1 * pTmpXG[i * size_img.width + j] + constGVal2;
+			mOutImg.at<Vec3b>(i, j)[2] = constRVal1 * pTmpXR[i * size_img.width + j] + constRVal2;*/
