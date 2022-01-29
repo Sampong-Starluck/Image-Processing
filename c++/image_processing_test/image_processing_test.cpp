@@ -378,16 +378,110 @@ void light_luminune(Mat image)
 	imshow("Light Luminane", light);
 }
 
+void histogram_equalization(Mat image)
+{
+	// TODO: Add your command handler code here
+	Mat img_src = image;
+	Mat imgEqual = Mat(img_src.rows, img_src.cols, CV_8UC3);
+	imgEqual = img_src;
+	int r, g, b;
+	BYTE intensityB;
+	BYTE intensityG;
+	BYTE intensityR;
+	unsigned int histoB[256] = { 0, };
+	unsigned int histoG[256] = { 0, };
+	unsigned int histoR[256] = { 0, };
+	BYTE LUTB[256] = { 0, };
+	BYTE LUTG[256] = { 0, };
+	BYTE LUTR[256] = { 0, };
+
+	for (int y = 0; y < img_src.rows; y++)
+	{
+		for (int x = 0; x < img_src.cols; x++)
+		{
+			intensityB = img_src.at<Vec3b>(Point(x, y))[0];
+			intensityG = img_src.at<Vec3b>(Point(x, y))[1];
+			intensityR = img_src.at<Vec3b>(Point(x, y))[2];
+
+			histoB[intensityB]++;
+			histoG[intensityG]++;
+			histoR[intensityR]++;
+		}
+	}
+
+	for (int i = 0; i < 256; i++)
+	{
+		if (i == 0)
+		{
+			histoB[i] = histoB[0];
+			histoG[i] = histoG[0];
+			histoR[i] = histoR[0];
+		}
+		else
+		{
+			histoB[i] = histoB[i] + histoB[i - 1];
+			histoG[i] = histoG[i] + histoG[i - 1];
+			histoR[i] = histoR[i] + histoR[i - 1];
+		}
+	}
+
+	for (int i = 0; i < 256; i++)
+	{
+		LUTB[i] = ((float)histoB[i] / (float)(img_src.cols * img_src.rows)) * 255;
+		LUTG[i] = ((float)histoG[i] / (float)(img_src.cols * img_src.rows)) * 255;
+		LUTR[i] = ((float)histoR[i] / (float)(img_src.cols * img_src.rows)) * 255;
+	}
+
+	// write your code here	
+	for (int y = 0; y < img_src.rows; y++)
+	{
+		for (int x = 0; x < img_src.cols; x++)
+		{
+			// step 1: get_original RGB value
+			r = img_src.at<Vec3b>(y, x)[2];
+			g = img_src.at<Vec3b>(y, x)[1];
+			b = img_src.at<Vec3b>(y, x)[0];
+
+			// step 2: RGB value = Look Up Table
+
+			/*for (int i = 0; i < 256; i++)
+			{
+
+				
+				
+			}*/
+			/*if (0 <= b <= 255 || 0 <= r <= 255 || 0 <= g <= 255)
+			{
+				
+			}*/
+			b = int(LUTB);
+			r = int(LUTR);
+			g = int(LUTG);
+
+			// step 3: new_image = RGB value
+
+			imgEqual.at<Vec3b>(y, x)[0] = floor(255 * b);
+			imgEqual.at<Vec3b>(y, x)[1] = floor(255 * g);
+			imgEqual.at<Vec3b>(y, x)[2] = floor(255 * r);
+
+		}
+	}
+
+	//img_save = imgEqual;
+	namedWindow("Histogram Equalization", WINDOW_AUTOSIZE);
+	imshow("Histogram Equalization", imgEqual);
+}
+
 int main()
 {   
 	Mat image, newImage;
-    image = imread("../../k-landscape-wallpaper.jpg", IMREAD_COLOR);
+    image = imread("../../resource/glass.jpg", IMREAD_COLOR);
 	int old_width, old_height;
 	int choise;
 	string ans;
 	old_height = image.rows;
 	old_width = image.cols;
-	int width = old_width / 4, height = old_height / 4;// 1920 * 1080
+	int width = old_width / 1, height = old_height / 1;// 1920 * 1080
 	resize(image, newImage, Size(width, height));
 
 	namedWindow("image", WINDOW_AUTOSIZE);
@@ -436,7 +530,8 @@ int main()
 	mirror_image(newImage);*/
 	//sobel_filter(newImage);
 	//dark_luminune(newImage);
-	light_luminune(newImage);
+	//light_luminune(newImage);
+	histogram_equalization(newImage);
 
 
     waitKey(0);

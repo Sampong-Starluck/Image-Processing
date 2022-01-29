@@ -33,6 +33,9 @@ BEGIN_MESSAGE_MAP(CImageProcessing2View, CView)
 	ON_COMMAND(ID_OPERATION_INVERTCOLOR, &CImageProcessing2View::OnOperationInvertcolor)
 	ON_COMMAND(ID_OPERATION_MIRRORIMAGE, &CImageProcessing2View::OnOperationMirrorimage)
 	ON_COMMAND(ID_OPERATION_SOBELFILTER, &CImageProcessing2View::OnOperationSobelfilter)
+	ON_COMMAND(ID_LUMINANCE_DARK, &CImageProcessing2View::OnLuminanceDark)
+	ON_COMMAND(ID_LUMINANCE_LIGHT, &CImageProcessing2View::OnLuminanceLight)
+	ON_COMMAND(ID_OPERATION_HISTOGRAMEQUATION, &CImageProcessing2View::OnOperationHistogramEquation)
 END_MESSAGE_MAP()
 
 // CImageProcessing2View construction/destruction
@@ -461,4 +464,188 @@ void CImageProcessing2View::OnOperationSobelfilter()
 
 	namedWindow("Edge Sobel", 1);
 	imshow("Edge Sobel", mOutImg);
+}
+
+
+void CImageProcessing2View::OnLuminanceDark()
+{
+	// TODO: Add your command handler code here
+
+	Mat newImage,image = image_source;
+	resize(image, newImage, Size(width, height));
+	Mat dark = Mat::zeros(newImage.size(), newImage.type());
+	int dark_lumine = 100;
+	int red, green, blue;
+	int r, g, b;
+	for (int i = 0; i < newImage.rows; i++)
+	{
+		for (int j = 0; j < newImage.cols; j++)
+		{
+			red = newImage.at<Vec3b>(i, j)[2];
+			blue = newImage.at<Vec3b>(i, j)[0];
+			green = newImage.at<Vec3b>(i, j)[1];
+
+			r = red - dark_lumine;
+			g = green - dark_lumine;
+			b = blue - dark_lumine;
+
+			if (r < 0)
+			{
+				r = 0;
+			}
+			if (g < 0)
+			{
+				g = 0;
+			}
+			if (b < 0)
+			{
+				b = 0;
+			}
+
+			dark.at<Vec3b>(i, j)[2] = r;
+			dark.at<Vec3b>(i, j)[1] = g;
+			dark.at<Vec3b>(i, j)[0] = b;
+		}
+	}
+	namedWindow("Dark Luminane", WINDOW_AUTOSIZE);
+	imshow("Dark Luminane", dark);
+}
+
+
+void CImageProcessing2View::OnLuminanceLight()
+{
+	// TODO: Add your command handler code here
+
+	Mat newImage, image = image_source;
+	resize(image, newImage, Size(width, height));
+	Mat light = Mat::zeros(newImage.size(), newImage.type());
+	int light_lumine = 100;
+	int red, green, blue;
+	int r, g, b;
+	for (int i = 0; i < newImage.rows; i++)
+	{
+		for (int j = 0; j < newImage.cols; j++)
+		{
+			red = newImage.at<Vec3b>(i, j)[2];
+			blue = newImage.at<Vec3b>(i, j)[0];
+			green = newImage.at<Vec3b>(i, j)[1];
+
+			r = red + light_lumine;
+			g = green + light_lumine;
+			b = blue + light_lumine;
+
+			if (r > 255)
+			{
+				r = 255;
+			}
+			if (g > 255)
+			{
+				g = 255;
+			}
+			if (b > 255)
+			{
+				b = 255;
+			}
+
+			light.at<Vec3b>(i, j)[2] = r;
+			light.at<Vec3b>(i, j)[1] = g;
+			light.at<Vec3b>(i, j)[0] = b;
+		}
+	}
+	namedWindow("Light Luminane", WINDOW_AUTOSIZE);
+	imshow("Light Luminane", light);
+}
+
+
+
+void CImageProcessing2View::OnOperationHistogramEquation()
+{
+	// TODO: Add your command handler code here
+	Mat img_src = image_source;
+	Mat imgEqual = Mat(img_src.rows, img_src.cols, CV_8UC3);
+	imgEqual = img_src;
+	int r, g, b;
+	BYTE intensityB;
+	BYTE intensityG;
+	BYTE intensityR;
+	unsigned int histoB[256] = { 0, };
+	unsigned int histoG[256] = { 0, };
+	unsigned int histoR[256] = { 0, };
+	BYTE LUTB[256] = { 0, };
+	BYTE LUTG[256] = { 0, };
+	BYTE LUTR[256] = { 0, };
+
+	for (int y = 0; y < img_src.rows; y++)
+	{
+		for (int x = 0; x < img_src.cols; x++)
+		{
+			intensityB = img_src.at<Vec3b>(Point(x, y))[0];
+			intensityG = img_src.at<Vec3b>(Point(x, y))[1];
+			intensityR = img_src.at<Vec3b>(Point(x, y))[2];
+
+			histoB[intensityB]++;
+			histoG[intensityG]++;
+			histoR[intensityR]++;
+		}
+	}
+
+	for (int i = 0; i < 256; i++)
+	{
+		if (i == 0)
+		{
+			histoB[i] = histoB[0];
+			histoG[i] = histoG[0];
+			histoR[i] = histoR[0];
+		}
+		else
+		{
+			histoB[i] = histoB[i] + histoB[i - 1];
+			histoG[i] = histoG[i] + histoG[i - 1];
+			histoR[i] = histoR[i] + histoR[i - 1];
+		}
+	}
+
+	for (int i = 0; i < 256; i++)
+	{
+		LUTB[i] = ((float)histoB[i] / (float)(img_src.cols * img_src.rows)) * 255;
+		LUTG[i] = ((float)histoG[i] / (float)(img_src.cols * img_src.rows)) * 255;
+		LUTR[i] = ((float)histoR[i] / (float)(img_src.cols * img_src.rows)) * 255;
+	}
+
+	// write your code here	
+	for (int y = 0; y < img_src.rows; y++)
+	{
+		for (int x = 0; x < img_src.cols; x++)
+		{
+			// step 1: get_original RGB value
+			r = img_src.at<Vec3b>(y, x)[2];
+			g = img_src.at<Vec3b>(y, x)[1];
+			b = img_src.at<Vec3b>(y, x)[0];
+
+			// step 2: RGB value = Look Up Table
+			for (int n = 0; n < intensityB; n++)
+			{
+				b += LUTB[n];
+			}
+			for (int n = 0; n < intensityG; n++)
+			{
+				g += LUTG[n];
+			}
+			for (int n = 0; n < intensityR; n++)
+			{
+				r += LUTR[n];
+			}
+			
+			// step 3: new_image = RGB value
+
+			imgEqual.at<Vec3b>(y, x)[0] = floor(255 * b);
+			imgEqual.at<Vec3b>(y, x)[1] = floor(255 * g);
+			imgEqual.at<Vec3b>(y, x)[2] = floor(255 * r);
+
+		}
+	}
+
+	img_save = imgEqual;
+	namedWindow("Histogram Equalization", 1);
+	imshow("Histogram Equalization", imgEqual);
 }

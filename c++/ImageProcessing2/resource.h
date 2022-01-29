@@ -23,13 +23,18 @@
 #define ID_OPERATION_INVERTCOLOR        32772
 #define ID_OPERATION_MIRRORIMAGE        32773
 #define ID_OPERATION_SOBELFILTER        32774
+#define ID_OPERATION_LUMINANCE          32775
+#define ID_LUMINANCE_DARK               32776
+#define ID_LUMINANCE_LIGHT              32777
+#define ID_LUMINANCE_LIGHT32778         32778
+#define ID_OPERATION_HISTOGRAMEQUATION  32779
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        310
-#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_COMMAND_VALUE         32780
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

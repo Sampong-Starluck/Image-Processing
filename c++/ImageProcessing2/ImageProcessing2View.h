@@ -58,6 +58,10 @@ public:
 	int width = 960;
 	int height = 540;
 	afx_msg void OnOperationSobelfilter();
+	afx_msg void OnLuminanceDark();
+	afx_msg void OnLuminanceLight();
+	afx_msg void OnOperationLuminance();
+	afx_msg void OnOperationHistogramEquation();
 };
 
 #ifndef _DEBUG  // debug version in ImageProcessing2View.cpp
