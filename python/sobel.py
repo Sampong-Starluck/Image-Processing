@@ -32,12 +32,6 @@ def sobel_filter():
     pTmpYB = [width * height]
     pTmpYG = [width * height]
     pTmpYR = [width * height]
-    # pTmpXB = [0]*(width*height)
-    # pTmpXG = [0]*(width*height)
-    # pTmpXR = [0]*(width*height)
-    # pTmpYB = [0]*(width*height)
-    # pTmpYG = [0]*(width*height)
-    # pTmpYR = [0]*(width*height)
 
     # Donner les variables pour loop
     i = 0
@@ -120,9 +114,6 @@ def sobel_filter():
             constBVal1 = pTmpXB[i * width + j]
             constGVal1 = pTmpXG[i * width + j]
             constRVal1 = pTmpXR[i * width + j]
-            # constBVal2 = pTmpXB[i * width + j]
-            # constGVal2 = pTmpXG[i * width + j]
-            # constRVal2 = pTmpXR[i * width + j]
             constBVal2 = pTmpYB[i * width + j]
             constGVal2 = pTmpYG[i * width + j]
             constRVal2 = pTmpYR[i * width + j]

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-image = cv2.imread("Enter the image name.extension", cv2.IMREAD_COLOR)
+image = cv2.imread("../resource/k-landscape-wallpaper.jpg", cv2.IMREAD_COLOR)
 
 # Optional 
 def resizeImage():

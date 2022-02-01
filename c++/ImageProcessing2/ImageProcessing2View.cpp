@@ -618,34 +618,27 @@ void CImageProcessing2View::OnOperationHistogramEquation()
 		for (int x = 0; x < img_src.cols; x++)
 		{
 			// step 1: get_original RGB value
+
 			r = img_src.at<Vec3b>(y, x)[2];
 			g = img_src.at<Vec3b>(y, x)[1];
 			b = img_src.at<Vec3b>(y, x)[0];
 
 			// step 2: RGB value = Look Up Table
-			for (int n = 0; n < intensityB; n++)
-			{
-				b += LUTB[n];
-			}
-			for (int n = 0; n < intensityG; n++)
-			{
-				g += LUTG[n];
-			}
-			for (int n = 0; n < intensityR; n++)
-			{
-				r += LUTR[n];
-			}
-			
+
+			r = int(LUTR[r]);
+			g = int(LUTG[g]);
+			b = int(LUTB[b]);
+
 			// step 3: new_image = RGB value
 
-			imgEqual.at<Vec3b>(y, x)[0] = floor(255 * b);
-			imgEqual.at<Vec3b>(y, x)[1] = floor(255 * g);
-			imgEqual.at<Vec3b>(y, x)[2] = floor(255 * r);
+			imgEqual.at<Vec3b>(y, x)[0] = b;
+			imgEqual.at<Vec3b>(y, x)[1] = g;
+			imgEqual.at<Vec3b>(y, x)[2] = r;
 
 		}
 	}
 
-	img_save = imgEqual;
-	namedWindow("Histogram Equalization", 1);
+	//img_save = imgEqual;
+	namedWindow("Histogram Equalization", WINDOW_AUTOSIZE);
 	imshow("Histogram Equalization", imgEqual);
 }

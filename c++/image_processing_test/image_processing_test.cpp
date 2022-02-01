@@ -438,31 +438,22 @@ void histogram_equalization(Mat image)
 		for (int x = 0; x < img_src.cols; x++)
 		{
 			// step 1: get_original RGB value
+
 			r = img_src.at<Vec3b>(y, x)[2];
 			g = img_src.at<Vec3b>(y, x)[1];
 			b = img_src.at<Vec3b>(y, x)[0];
 
 			// step 2: RGB value = Look Up Table
 
-			/*for (int i = 0; i < 256; i++)
-			{
-
-				
-				
-			}*/
-			/*if (0 <= b <= 255 || 0 <= r <= 255 || 0 <= g <= 255)
-			{
-				
-			}*/
-			b = int(LUTB);
-			r = int(LUTR);
-			g = int(LUTG);
-
+			r = int(LUTR[r]);
+			g = int(LUTG[g]);
+			b = int(LUTB[b]);
+			
 			// step 3: new_image = RGB value
 
-			imgEqual.at<Vec3b>(y, x)[0] = floor(255 * b);
-			imgEqual.at<Vec3b>(y, x)[1] = floor(255 * g);
-			imgEqual.at<Vec3b>(y, x)[2] = floor(255 * r);
+			imgEqual.at<Vec3b>(y, x)[0] = b;
+			imgEqual.at<Vec3b>(y, x)[1] = g;
+			imgEqual.at<Vec3b>(y, x)[2] = r;
 
 		}
 	}
