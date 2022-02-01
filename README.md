@@ -13,7 +13,7 @@
 ## Code explain and image formulas
 ---
 ### Grayscale
-The formula for this function is $ Luminance = (0.299 \times blue) + (0.587 \times green) + (0.114 \times red) $$ <br>
+The formula for this function is $$ Luminance = (0.299 \times blue) + (0.587 \times green) + (0.114 \times red) $$ <br>
 where red have color channel: 2, green color channel: 1 and blue color channel: 0
 ---
 ### Invert_Color
