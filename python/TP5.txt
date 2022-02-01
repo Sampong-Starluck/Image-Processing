@@ -1,0 +1,91 @@
+// Dark_Luminance
+
+void CImageProcessing2View::OnLuminanceDark()
+{
+	// TODO: Add your command handler code here
+
+	Mat newImage,image = image_source;
+	resize(image, newImage, Size(width, height));
+	Mat dark = Mat::zeros(newImage.size(), newImage.type());
+	int dark_lumine = 100;
+	int red, green, blue;
+	int r, g, b;
+	for (int i = 0; i < newImage.rows; i++)
+	{
+		for (int j = 0; j < newImage.cols; j++)
+		{
+			red = newImage.at<Vec3b>(i, j)[2];
+			blue = newImage.at<Vec3b>(i, j)[0];
+			green = newImage.at<Vec3b>(i, j)[1];
+
+			r = red - dark_lumine;
+			g = green - dark_lumine;
+			b = blue - dark_lumine;
+
+			if (r < 0)
+			{
+				r = 0;
+			}
+			if (g < 0)
+			{
+				g = 0;
+			}
+			if (b < 0)
+			{
+				b = 0;
+			}
+
+			dark.at<Vec3b>(i, j)[2] = r;
+			dark.at<Vec3b>(i, j)[1] = g;
+			dark.at<Vec3b>(i, j)[0] = b;
+		}
+	}
+	namedWindow("Dark Luminane", WINDOW_AUTOSIZE);
+	imshow("Dark Luminane", dark);
+}
+
+// Light_Luminance
+
+void CImageProcessing2View::OnLuminanceLight()
+{
+	// TODO: Add your command handler code here
+
+	Mat newImage, image = image_source;
+	resize(image, newImage, Size(width, height));
+	Mat light = Mat::zeros(newImage.size(), newImage.type());
+	int light_lumine = 100;
+	int red, green, blue;
+	int r, g, b;
+	for (int i = 0; i < newImage.rows; i++)
+	{
+		for (int j = 0; j < newImage.cols; j++)
+		{
+			red = newImage.at<Vec3b>(i, j)[2];
+			blue = newImage.at<Vec3b>(i, j)[0];
+			green = newImage.at<Vec3b>(i, j)[1];
+
+			r = red + light_lumine;
+			g = green + light_lumine;
+			b = blue + light_lumine;
+
+			if (r > 255)
+			{
+				r = 255;
+			}
+			if (g > 255)
+			{
+				g = 255;
+			}
+			if (b > 255)
+			{
+				b = 255;
+			}
+
+			light.at<Vec3b>(i, j)[2] = r;
+			light.at<Vec3b>(i, j)[1] = g;
+			light.at<Vec3b>(i, j)[0] = b;
+		}
+	}
+	namedWindow("Light Luminane", WINDOW_AUTOSIZE);
+	imshow("Light Luminane", light);
+}

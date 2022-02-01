@@ -1,0 +1,17 @@
+// step 1: get_original RGB value
+
+			r = img_src.at<Vec3b>(y, x)[2];
+			g = img_src.at<Vec3b>(y, x)[1];
+			b = img_src.at<Vec3b>(y, x)[0];
+
+			// step 2: RGB value = Look Up Table
+
+			r = int(LUTR[r]);
+			g = int(LUTG[g]);
+			b = int(LUTB[b]);
+
+			// step 3: new_image = RGB value
+
+			imgEqual.at<Vec3b>(y, x)[0] = b;
+			imgEqual.at<Vec3b>(y, x)[1] = g;
+			imgEqual.at<Vec3b>(y, x)[2] = r;
