@@ -11,7 +11,9 @@
 ---
 
 ## Code explain and image formulas
-Note: The fully render explaination can be found in python jupiter notebook. (image_processing.ipynb)
+Note: 
+- The fully render explaination can be found in python jupiter notebook. (image_processing.ipynb)
+- Java code cannot run properly. I recommend to use C++ or Python instead of Java.
 ---
 ### Grayscale
 The formula for this function is 
